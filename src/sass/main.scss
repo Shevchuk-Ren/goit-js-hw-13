@@ -7,4 +7,9 @@
 // @import './example';
 img {
   width: 500px;
+  height: 350px;
+}
+.gallery {
+  display: flex;
+  flex-wrap: wrap;
 }
