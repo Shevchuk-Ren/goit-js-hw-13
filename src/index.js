@@ -1,17 +1,23 @@
 import './sass/main.scss';
+import NewsApiService from './js/api-service'
 import Notiflix from "notiflix";
 import gallery from './templates/gallery-card.hbs'
-const options = {
-    headers: {
-        Authorization: '22611129-58a3168a9d70d9c0808a9c973',
-    },
+
+// const options = {
+//     headers: {
+//         Authorization: '22611129-58a3168a9d70d9c0808a9c973',
+//     },
     
-};
-console.log(gallery)
+// };
+// console.log(NewsApiService)
+const newsApiService = new NewsApiService();
+
 const refs = {
     form: document.querySelector('.search-form'),
     input: document.querySelector('input'),
-    btnSearch: document.querySelector('button')
+    btnSearch: document.querySelector('button'),
+    galleryContainer: document.querySelector('.gallery'),
+    btnLoadMore: document.querySelector('.loader')
 }
 // const URL = `https://pixabay.com/api/?key=${options.headers.Authorization}&q=cat`;
 // fetch(URL).then(r => 
@@ -19,24 +25,26 @@ const refs = {
 // ).then(console.log);
 // console.log(console.log)
 
-refs.btnSearch.addEventListener('click', searchGalleryImg);
+// refs.btnSearch.addEventListener('click', searchGalleryImg);
 // refs.input.addEventListener('input', onInput)
+refs.form.addEventListener('submit', onSearch)
+refs.btnLoadMore.addEventListener('click', onLoadMore)
 
-function searchGalleryImg(evt, gallery) {
+
+
+function onSearch(evt) {
     evt.preventDefault()
-    const a = refs.input.value;
-     console.log(a);
-    console.log('hhh')
-    // console.log(gallery)
-    const URL = `https://pixabay.com/api/?key=${options.headers.Authorization}&q=${a}`;
-fetch(URL).then(r => 
-    r.json()
-).then(console.log);
+  
+    // через форму добираемся до инпута по его имени searchQuery делаем потому что  refs.input.value при модульном хранении файлов не работает
+    newsApiService.query = evt.currentTarget.elements.searchQuery.value;
     
-}
-// function onInput(evt) {
-   
-//      const querySearch = refs.input.value;
-//     return querySearch;
+    newsApiService.fetchArticles()
+       
+    //  console.log(`значение инпут`, querySearch);
 
-// }
+
+}
+
+function onLoadMore() {
+     newsApiService.fetchArticles()
+}
