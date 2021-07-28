@@ -48,6 +48,7 @@ function onLoadMore() {
      
           console.log(sum, `sum`)
         appendGalleryMarkup(hits, totalHits)
+        
     })
 }
 
@@ -81,9 +82,15 @@ function appendGalleryMarkup(fotoGallery, totalHits, e) {
 });
     console.log(lightbox);
 
-  
-
-
+    //скролл
+    window.scroll(0, 0);
+    
+    function pageScroll() {
+    window.scrollBy(0,1);
+    scrolldelay = setTimeout(pageScroll,10);
+    }
+     pageScroll()
+    
 
       if (totalHits === 0) {
               clearGallery()
@@ -92,7 +99,8 @@ function appendGalleryMarkup(fotoGallery, totalHits, e) {
 
           btnLoadMore.hide()
           return  Notiflix.Notify.failure("We're sorry, but you've reached the end of search results.");
-        }
+      }
+   
 }
 
 function clearGallery() {
@@ -130,18 +138,4 @@ const newsApiService = new NewsApiService();
 function openGalleryFoto(e) {
     e.preventDefault();
     console.log(e.target.parentNode.href)
-//  lightbox.refresh();
-//     lightbox.open(e.target.parentNode.href)
-    // var lightbox = new SimpleLightbox('.gallery a', {elements: '.gallery a'} );
-    // // var lightbox = new SimpleLightbox({elements: '.gallery a'});
-    // console.log(lightbox);
-    // lightbox.refresh();
-    // lightbox.open(e.target.parentNode.href)
-
-  
-
-
-    // lightbox.show(e.target.parentNode.href)
-    // lightbox.show({ items: [e.target.parentNode.href] })
-
     }
