@@ -1,11 +1,13 @@
 import './sass/main.scss';
+import './sass/simple-lightbox.scss'
 import NewsApiService from './js/api-service'
 import Notiflix from "notiflix";
 import gallery from './templates/gallery-card.hbs'
 import loadMoreBtn from './templates/button-load-more.hbs'
 import LoadMoreBtnClass from './js/load-btn';
+import SimpleLightbox from "simplelightbox";
 
-
+// var lightbox = new SimpleLightbox('.gallery a', { /* options */ });
 const refs = {
     form: document.querySelector('.search-form'),
     input: document.querySelector('input'),
@@ -15,12 +17,17 @@ const refs = {
 
 refs.form.addEventListener('submit', onSearch)
 
+
+
 let sum = null;
 let btnLoadMore = null;
 
 
 function onSearch(evt) {
     evt.preventDefault()
+    console.log(evt.currentTarget)
+    // if (evt.currentTarget === '')
+    //     const a = document.querySelector('a')
     // через форму добираемся до инпута по его имени searchQuery делаем потому что  refs.input.value при модульном хранении файлов не работает
     newsApiService.query = evt.currentTarget.elements.searchQuery.value;
     newsApiService.resetPage();
@@ -44,7 +51,7 @@ function onLoadMore() {
     })
 }
 
-function appendGalleryMarkup(fotoGallery, totalHits) {
+function appendGalleryMarkup(fotoGallery, totalHits, e) {
 
     clearGallery()
     console.log(sum, `summ`)
@@ -65,6 +72,18 @@ function appendGalleryMarkup(fotoGallery, totalHits) {
    
     btnLoadMore.refs.button.addEventListener('click', onLoadMore);
     refs.galleryContainer.insertAdjacentHTML('afterbegin', gallery(fotoGallery))
+    
+    // слушатель для модалки
+    var lightbox = new SimpleLightbox('.gallery a', {elements: '.gallery a'} );
+   
+    lightbox.on('show.simplelightbox', function () {
+	 refs.galleryContainer.addEventListener('click', openGalleryFoto)
+});
+    console.log(lightbox);
+
+  
+
+
 
       if (totalHits === 0) {
               clearGallery()
@@ -82,3 +101,47 @@ function clearGallery() {
 
 const newsApiService = new NewsApiService();
 //  console.log(loadMoreBtnClass)
+
+
+// ИНДЕКС
+
+// function openGalleryFoto(e, fotoGallery) {
+//     e.preventDefault();
+//     //див элемента, в котором храниться наша картинка
+//     const currentCard = e.target.parentNode.parentNode;
+//     //создаем обьект-коллекцию со всеми дивами в галерее
+//     const arrives = document.querySelectorAll('.photo-card')
+ 
+//     //условие, которое дает реакцию только на клик на картинку
+//       if (e.target.nodeName !== 'IMG') {
+//     return;
+//       }
+    
+//     //преобразовываем коллекцию в массив
+//     const createObject = Object.values(arrives);
+//     console.dir(b.indexOf(e.target.parentNode.parentNode), `hgty`)
+//     //узнаем индекс нашего элемента
+//     const currentIndex = createObject.indexOf(currentTarget)
+
+
+//     }
+    
+    
+function openGalleryFoto(e) {
+    e.preventDefault();
+    console.log(e.target.parentNode.href)
+//  lightbox.refresh();
+//     lightbox.open(e.target.parentNode.href)
+    // var lightbox = new SimpleLightbox('.gallery a', {elements: '.gallery a'} );
+    // // var lightbox = new SimpleLightbox({elements: '.gallery a'});
+    // console.log(lightbox);
+    // lightbox.refresh();
+    // lightbox.open(e.target.parentNode.href)
+
+  
+
+
+    // lightbox.show(e.target.parentNode.href)
+    // lightbox.show({ items: [e.target.parentNode.href] })
+
+    }
