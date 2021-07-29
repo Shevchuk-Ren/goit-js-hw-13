@@ -2,42 +2,35 @@ import './sass/main.scss';
 import './sass/simple-lightbox.scss'
 import NewsApiService from './js/axios-api'
 import Notiflix from "notiflix";
+import refs from './js/refs'
 import gallery from './templates/gallery-card.hbs'
 import loadMoreBtn from './templates/button-load-more.hbs'
 import LoadMoreBtnClass from './js/load-btn';
 import SimpleLightbox from "simplelightbox";
 import "regenerator-runtime";
+const { form, input, btnSearch, galleryContainer } = refs;
 
 
-const refs = {
-    form: document.querySelector('.search-form'),
-    input: document.querySelector('input'),
-    btnSearch: document.querySelector('button'),
-    galleryContainer: document.querySelector('.gallery'),
-}
-
-
-refs.form.addEventListener('submit', onSearch)
+form.addEventListener('submit', onSearch)
 
 let sum = null;
 let btnLoadMore = null;
 
-
-function onSearch(evt) {
-    evt.preventDefault()
+// function onSearch(evt) {
+//     evt.preventDefault()
   
-    // через форму добираемся до инпута по его имени searchQuery делаем потому что  refs.input.value при модульном хранении файлов не работает
-    newsApiService.query = evt.currentTarget.elements.searchQuery.value;
-    newsApiService.resetPage();
-    newsApiService.fetchFoto()
-      console.log(newsApiService) 
-        .then(({ hits, totalHits }) => {
-        sum = hits.length;
-        Notiflix.Notify.success(`Hooray! We found ${totalHits} images.`);
-        console.log(totalHits)
-     appendGalleryMarkup(hits, totalHits)   
-    })
-}
+//     // через форму добираемся до инпута по его имени searchQuery делаем потому что  refs.input.value при модульном хранении файлов не работает
+//     newsApiService.query = evt.currentTarget.elements.searchQuery.value;
+//     newsApiService.resetPage();
+//     newsApiService.fetchFoto()
+//       console.log(newsApiService) 
+//         .then(({ hits, totalHits }) => {
+//         sum = hits.length;
+//         Notiflix.Notify.success(`Hooray! We found ${totalHits} images.`);
+//         console.log(totalHits)
+//      appendGalleryMarkup(hits, totalHits)   
+//     })
+// }
 
  function onSearch(evt) {
     evt.preventDefault()
@@ -53,33 +46,30 @@ function onSearch(evt) {
        
      appendGalleryMarkup(hits, totalHits)   
     }).catch(error => console.log(error))
-   
 }
 
 function onLoadMore() {
     newsApiService.incrementPage();
-    console.log( newsApiService.incrementPage())
     newsApiService.fetchFoto().then(({ hits, totalHits }) => {
         sum += hits.length;
         appendGalleryMarkup(hits, totalHits)
-        
     })
 }
 
 function appendGalleryMarkup(fotoGallery, totalHits, e) {
     clearGallery()
     if (document.querySelector('.load-more') === null) {
-     
-          const loadMoreButton = loadMoreBtn();
-          refs.galleryContainer.insertAdjacentHTML('beforeend', loadMoreButton);
-          btnLoadMore = new LoadMoreBtnClass({
+        const loadMoreButton = loadMoreBtn();
+        galleryContainer.insertAdjacentHTML('beforeend', loadMoreButton);
+        btnLoadMore = new LoadMoreBtnClass({
               selector: '.load-more',
               hidden: false,
           });
       }
    
     btnLoadMore.refs.button.addEventListener('click', onLoadMore);
-    refs.galleryContainer.insertAdjacentHTML('afterbegin', gallery(fotoGallery))
+    
+    galleryContainer.insertAdjacentHTML('afterbegin', gallery(fotoGallery))
     
     // слушатель для модалки
     getSimpleLightBox()
@@ -92,7 +82,7 @@ function appendGalleryMarkup(fotoGallery, totalHits, e) {
 }
 
 function clearGallery() {
-    refs.galleryContainer.innerHTML = '';
+    galleryContainer.innerHTML = '';
 };
   function pageScrollToStart() {
     window.scrollBy(0,1);
@@ -105,7 +95,7 @@ function getSimpleLightBox() {
     var lightbox = new SimpleLightbox('.gallery a', { elements: '.gallery a' });
    
     lightbox.on('show.simplelightbox', function () {
-	 refs.galleryContainer.addEventListener('click',evt =>  evt.preventDefault())
+        galleryContainer.addEventListener('click',evt =>  evt.preventDefault())
 });
     }
 function showNotification(totalHits) {
