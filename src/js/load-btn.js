@@ -7,6 +7,7 @@ export default class LoadMoreBtn {
 
   getRefs(selector) {
     const refs = {};
+    console.log(refs, `rty`)
     refs.button = document.querySelector(selector);
  
 
