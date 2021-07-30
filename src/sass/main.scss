@@ -35,11 +35,11 @@ body {
     flex-wrap: wrap;
     justify-content: center;
     padding-top: 20px;
-    padding-left: 5px;
-    padding-right: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
   }
 }
-@media screen and (min-width: 228px) {
+@media screen and (min-width: 728px) {
   .gallery {
     display: flex;
     flex-wrap: wrap;
@@ -89,12 +89,25 @@ input {
 .info-item {
   padding: 5px;
 }
-
+@media screen and (max-width: 400px) {
+  .info-item {
+    padding: 5px;
+  }
+}
+@media screen and (max-width: 400px) {
+  .info-item:not(:first-child) {
+    margin-left: 5px;
+  }
+}
 .info-item:not(:first-child) {
   margin-left: 10px;
 }
+@media screen and (max-width: 400px) {
+  .info-item:not(:first-child) {
+    margin-left: 0;
+  }
+}
 .photo-card {
-  padding: 10px;
 }
 @media screen and (max-width: 400px) {
   .photo-card {
@@ -110,5 +123,6 @@ input {
     margin-left: 30px;
     margin-top: 30px;
     box-shadow: 0 0 20px #444;
+    padding: 10px;
   }
 }
